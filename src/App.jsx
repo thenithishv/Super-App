@@ -1,10 +1,8 @@
-
 import NotFoundPage from './pages/NotFoundPage'
 import RegisterPage from './pages/RegisterPage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
