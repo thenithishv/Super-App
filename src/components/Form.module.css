@@ -1,4 +1,13 @@
 .container{
     height: 100%;
     width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.error{
+    color: red;
+    font-size: 0.8rem;
 }

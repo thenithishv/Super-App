@@ -1,53 +1,58 @@
 import { useState } from "react";
-import styles from "./Form.module.css"
-import validateForm from "../utils/validateForm";
+import styles from "./Form.module.css";
 
-function Form() {
-
-
-    const [name,setName] = useState("");
-    const [email,setEmail] = useState("");
-    const [username,setUsername] = useState("");
-    const[phone,setPhone] = useState("");
-    const [error,setError] = useState(false);
-
+function Form({
+  name,
+  setName,
+  email,
+  setEmail,
+  username,
+  setUsername,
+  phone,
+  setPhone,
+  error,
+  setError,
+  submitHandler,
+}) {
   return (
     <div className={styles.container}>
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      {error?.name && <p className={styles.error}>Name is required</p>}
 
-        <input 
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e)=>setName(e.target.value)}
-        />
+      <input
+        type="text"
+        placeholder="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
 
-         <input 
-            type="text"
-            placeholder="username"
-            value={username}
-            onChange={(e)=>setUsername(e.target.value)}
-        />
+      {error?.username && <p className={styles.error}>username is required</p>}
 
-        <input 
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-        />
+      <input
+        type="text"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      {error?.email && <p className={styles.error}>Email is required</p>}
 
-        <input 
-            type="text"
-            placeholder="Phone"
-            value={phone}
-            onChange={(e)=>setPhone(e.target.value)}
-        />
+      <input
+        type="text"
+        placeholder="Phone"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+      />
 
-        <button
-          onClick= {()=>validateForm(name,email,username,phone)}
-          >SIGNUP</button>
-        
+      {error?.phone && <p className={styles.error}>Phone is required</p>}
+
+      <button onClick={submitHandler}>SIGNUP</button>
     </div>
-  )
+  );
 }
 
-export default Form
+export default Form;
