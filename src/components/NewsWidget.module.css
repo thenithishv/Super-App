@@ -1,0 +1,27 @@
+.container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    position: relative;
+}
+
+.heading{
+    background-color: black;
+    padding: 10px 15px;
+    opacity: 0.75;
+    color: white;
+    position: absolute;
+    bottom: 0px;
+}
+
+.header img{
+    width: 100%;
+    object-fit: cover;
+}
+
+
+

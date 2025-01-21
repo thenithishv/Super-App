@@ -28,8 +28,9 @@ function WeatherWidget() {
       <div className={styles.header}>
         {dateTime && (
           <>
-          <div className={styles.date}>{dateTime.date}</div>
           <div className={styles.time}>{dateTime.time}</div>
+          <div className={styles.date}>{dateTime.date}</div>
+          
           </>
         )}
       </div>     

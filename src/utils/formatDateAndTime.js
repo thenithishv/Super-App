@@ -1,11 +1,10 @@
 const formatDateAndTime = (data=Date.now())=>{
     const newDate = new Date(data);
-    const formattedDate = newDate.toLocaleDateString( "en-US",{
+    const formattedTime = newDate.toLocaleTimeString( "en-US",{
         hour:"numeric",
-        minute:"numeric",
-        second:"numeric"
+        minute:"numeric"
     });
-    const formattedTime = newDate.toLocaleDateString("en-us",{
+    const formattedDate = newDate.toLocaleDateString("en-us",{
         month:"long",
         day:"numeric",
         year:"numeric",
