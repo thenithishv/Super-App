@@ -1,7 +1,8 @@
 import {useState, useEffect} from 'react';
 import styles from './TimerWidget.module.css';
 import { FaCaretUp,FaCaretDown  } from "react-icons/fa6";
- import { CircularProgressbar } from 'react-circular-progressbar';
+ import { CircularProgressbar,buildStyles } from 'react-circular-progressbar';
+ import "react-circular-progressbar/dist/styles.css";
 
 
 
@@ -12,21 +13,21 @@ const seconds_step=1;
 
 function TimerWidget() {
 
-    const [totalSeconds, setTotalSeconds] = useState(7263);
+    const [timeRemaining, setTimeRemaining] = useState(10);
     const [isRunning, setIsRunning] = useState(false);
     const [cachedSeconds, setCachedSeconds] = useState(10);
 
-    const parseTime = (totalSeconds)=>{
-        const hours = Math.floor(totalSeconds/3600);
-        const minutes = Math.floor((totalSeconds%3600)/60);
-        const seconds = totalSeconds%60;
+    const parseTime = (timeRemaining)=>{
+        const hours = Math.floor(timeRemaining/3600);
+        const minutes = Math.floor((timeRemaining%3600)/60);
+        const seconds = timeRemaining%60;
         return {hours,minutes,seconds}
     };
 
     useEffect(()=>{
         if(isRunning){
             const interval = setInterval(()=>{
-                setTotalSeconds((totalSeconds)=>{
+                setTimeRemaining((totalSeconds)=>{
                     if(totalSeconds >0) return totalSeconds-1;
                     else{
                         setIsRunning(false);
@@ -39,57 +40,48 @@ function TimerWidget() {
     },[isRunning]);
     
 
-    const stepHandler = (step)=>{
-    if(isRunning||(step < 0 && totalSeconds -step <0)) return;
-    setCachedSeconds(totalSeconds+step);
-    setTotalSeconds(totalSeconds+step);
+    const stepHandler = (step) => {
+      // Check if the process is running or if the step would result in negative time remaining
+      if (isRunning || (step < 0 && timeRemaining + step < 0)) return;
+  
+      // Calculate the new time remaining
+      const newTimeRemaining = timeRemaining + step;
+  
+      // Ensure that newTimeRemaining does not go below 0
+      if (newTimeRemaining >= 0) {
+          setCachedSeconds(newTimeRemaining);
+          setTimeRemaining(newTimeRemaining);
+      }
+  };
+  
+
+const formatTime = (time) => {
+  return `${time.hours.toString().padStart(2,"0")}:${time.minutes
+    .toString().padStart(2,"0")}:${time.seconds.toString().padStart(2,"0")}`;
 };
 
-
+const percentage = (timeRemaining/cachedSeconds)*100;
   return (
     <div className={styles.container}>
         <div className={styles.left}>
         <CircularProgressbar
-        value={totalSeconds}
-        maxValue={1}
-        text={`${(parseTime(totalSeconds).hours)}:${(parseTime(totalSeconds).minutes)}:${(parseTime(totalSeconds).seconds)}`}
+        value={percentage}
+        text={formatTime(parseTime(timeRemaining))}
         styles={{
-    // Customize the root svg element
-    root: {},
-    // Customize the path, i.e. the "completed progress"
-    path: {
-      // Path color
-      stroke: `rgba(62, 152, 199, ${totalSeconds / 100})`,
-      // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-      strokeLinecap: 'butt',
-      // Customize transition animation
-      transition: 'stroke-dashoffset 0.5s ease 0s',
-      // Rotate the path
-      transform: 'rotate(0.25turn)',
-      transformOrigin: 'center center',
-    },
-    // Customize the circle behind the path, i.e. the "total progress"
-    trail: {
-      // Trail color
-      stroke: '#d6d6d6',
-      // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-      strokeLinecap: 'butt',
-      // Rotate the trail
-      transform: 'rotate(0.25turn)',
-      transformOrigin: 'center center',
-    },
-    // Customize the text
-    text: {
-      // Text color
-      fill: '#f88',
-      // Text size
-      fontSize: '16px',
-    },
-    // Customize background - only used when the `background` prop is true
-    background: {
-      fill: '#3e98c7',
-    },
-  }}
+          path: {
+            stroke:"#ff6a6a",
+            strokeWidth:"3px",
+            transition:"stroke-dashoffset 0.5s ease 0s",
+          },
+          
+            trail :{
+              stroke:"transparent",
+            },
+            text : {
+              fill:"white",
+              fontsize:"2px",
+            },
+        }}
         />
         
         </div>
@@ -101,7 +93,7 @@ function TimerWidget() {
                     <FaCaretUp 
                     onClick={()=> stepHandler(hours_step)}
                     />
-                    <p>{parseTime(totalSeconds).hours}</p>
+                    <p>{parseTime(cachedSeconds).hours.toString().padStart(2, "0")}</p>
                     <FaCaretDown
                     onClick={()=>stepHandler(-hours_step)}
                      />
@@ -109,20 +101,25 @@ function TimerWidget() {
                 <div className={styles.cell}>
                     <p>Minutes</p>
                     <FaCaretUp 
-                    onClick={()=>setTotalSeconds(totalSeconds+minutes_step)}
+                    onClick={()=>stepHandler(minutes_step)}
                     />
-                    <p>{parseTime(totalSeconds).minutes}</p>
+                   <p>
+							{parseTime(cachedSeconds).minutes.toString().padStart(2, "0")}
+						</p>
                     <FaCaretDown 
-                    onClick={()=>setTotalSeconds(totalSeconds-minutes_step < 0 ? 0 : totalSeconds-minutes_step)}
+                    onClick={()=>stepHandler(-minutes_step)}
                     />
                 </div>
                 <div className={styles.cell}>
                     <p>Seconds</p>
                     <FaCaretUp 
-                    onClick={()=>setTotalSeconds(totalSeconds+seconds_step)}/>
-                    <p>{parseTime(totalSeconds).seconds}</p>
+                    onClick={()=>stepHandler(seconds_step)}
+                    />
+                   <p>
+							{parseTime(cachedSeconds).seconds.toString().padStart(2, "0")}
+						</p>
                     <FaCaretDown 
-                    onClick={()=>setTotalSeconds(totalSeconds-seconds_step <0 ? 0 : totalSeconds-seconds_step)}/>
+                    onClick={()=>stepHandler(-seconds_step)}/>
                     
                 </div>
             </div>

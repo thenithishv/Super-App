@@ -10,7 +10,6 @@ function MoviePage() {
             <img src={userAvatarSM} alt='User Avatar'/>
         </div>
         <div className={styles.movies}>
-
         </div>
     </div>
   )
